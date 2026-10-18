@@ -3,6 +3,7 @@
 **An open-weight agent harness that writes, validates, repairs, and remembers Agent Skills for any code repository.**
 
 🏆 *Built for the Hacktoberfest Hack Day Lahore x Fluxxion "Best Open-Source AI Project" challenge.*
+![SkillForge web UI](docs/screenshots/ui-full.png)
 
 ## 📖 What is SkillForge?
 
@@ -42,7 +43,7 @@ Open http://127.0.0.1:8000 in your browser.
 * **Option 1, repository link:** paste a public GitHub URL or `owner/repo`, then click **Forge from link**.
 * **Option 2, upload a folder:** pick a local repo folder, then click **Forge from folder**.
 * **Try demo** runs the bundled `demo_repo`, the fastest way to see it work.
-
+![Pasting a repository link](docs/screenshots/ui-link-input.png)
 Watch the **Live log**. `SUCCESS` is printed only after the harness's own re-check passes. The finished `SKILL.md` appears on the page and can be downloaded.
 
 On CPU a run takes a few minutes. Small repos (under about 15 files) are fastest.
