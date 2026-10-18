@@ -1,102 +1,136 @@
 # 🛠️ SkillForge
 
-**An open-weight agent harness that writes, validates, repairs, and remembers Agent Skills for code repositories.**
+**An open-weight agent harness that writes, validates, repairs, and remembers Agent Skills for any code repository.**
 
 🏆 *Built for the Hacktoberfest Hack Day Lahore x Fluxxion "Best Open-Source AI Project" challenge.*
 
 ## 📖 What is SkillForge?
 
-SkillForge is a self-healing agent harness that enables local open-weight AI models to autonomously generate, validate, and refine Agent Skills for any codebase.
+Paste a GitHub link or pick a local folder, and SkillForge produces an Agent Skill (`SKILL.md`) for that repository. A local open-weight model (Gemma 3 through Ollama) writes the skill, and a deterministic validator checks it. If the check fails, the error message tells the model exactly how to fix it, and the harness decides success by re-running validation itself, never by trusting the model.
 
-By utilizing intelligent context building, progressive disclosure, and an experience-based memory system, SkillForge allows smaller models to execute complex, repository-grounded tasks with high precision. It builds a compact overview of unfamiliar projects, interacts through a robust tool registry, and validates outputs deterministically.
+It runs fully on your machine: no paid API, no cloud.
 
-## 🧠 Model Support & Requirements
+## 🧠 Model
 
-* **Primary Engine:** Any open-weight model served by [Ollama](https://ollama.com/).
+* **Engine:** any open-weight model served by [Ollama](https://ollama.com/).
+* **Tested with:** `gemma3:4b` on CPU. This is the model used for every example in `examples/`.
+* **Change it:** set `FORGE_MODEL` (see Settings).
 
-* **Tested Model:** Extensively tested and optimized for `gemma3:4b`.
+## 🚀 Quick start
 
-* **Default Model:** `qwen3:8b` (can be overridden via environment variables).
+**You need:** Python 3.10+ (standard library only, no pip packages), [Git](https://git-scm.com/), and [Ollama](https://ollama.com/).
 
-## 🚀 How to Run the Harness
+### 1. Get the code
+```
+git clone https://github.com/sunbal822/KQS.git
+cd KQS
+```
 
-**Prerequisites:** Python 3.x (Standard library only—no external packages required) and Ollama running locally.
+### 2. Download the model (one time)
+```
+ollama pull gemma3:4b
+```
+Keep Ollama running in the background. If you use another model, set `FORGE_MODEL` first (Windows: `set FORGE_MODEL=gemma3:4b`, Linux/macOS: `export FORGE_MODEL=gemma3:4b`).
 
-1. **Pull the Model:**
+### 3. Start the web UI
+```
+python ui.py
+```
+Open http://127.0.0.1:8000 in your browser.
 
-   ```bash
-   ollama pull gemma3:4b
-   ```
+### 4. Forge a skill
+* **Option 1, repository link:** paste a public GitHub URL or `owner/repo`, then click **Forge from link**.
+* **Option 2, upload a folder:** pick a local repo folder, then click **Forge from folder**.
+* **Try demo** runs the bundled `demo_repo`, the fastest way to see it work.
 
-2. **Set the Environment Variable:**
+Watch the **Live log**. `SUCCESS` is printed only after the harness's own re-check passes. The finished `SKILL.md` appears on the page and can be downloaded.
 
-   * **Windows (cmd):** `set FORGE_MODEL=gemma3:4b`
-   * **Linux/macOS:** `export FORGE_MODEL=gemma3:4b`
+On CPU a run takes a few minutes. Small repos (under about 15 files) are fastest.
 
-3. **Run the Harness:**
-   Point SkillForge at any GitHub repository (URL or owner/repo) or a local folder. 
-   *(Note: When provided with a remote GitHub link or `owner/repo` format, SkillForge automatically clones the repository locally before proceeding with the inspection and analysis loop.)*
+## ⌨️ Command line
 
-   ```bash
-   # GitHub repository (owner/repo) - clones locally first
-   python harness.py psf/requests
-   
-   # Full GitHub URL - clones locally first
-   python harness.py https://github.com/spf13/cobra
-   
-   # Local directory - processes directly
-   python harness.py C:\path\to\project
-   
-   # Run without memory injection
-   python harness.py demo_repo --no-memory
-   ```
+```
+# GitHub repository (owner/repo) - cloned locally first
+python harness.py owner/repo
 
-   *Generated skills are written to `output/<name>/SKILL.md` and the action trace to `output/trace.json`.*
+# Full GitHub URL - cloned locally first
+python harness.py https://github.com/spf13/cobra
 
-## 📂 Agent Skill Specifications
+# Local directory - read directly
+python harness.py C:\path\to\project
 
-SkillForge natively generates and strictly validates skills against the required standard. Judges reviewing the `output/` or `examples/` folders will find that every skill adheres to the following:
+# Run without memory injection
+python harness.py demo_repo --no-memory
+```
+Skills are written to `output/<name>/SKILL.md` and the step trace to `output/trace.json`.
 
-1. **Naming Convention:** The skill name is strictly `lowercase-with-hyphens` and identically matches its parent folder name.
+## ⚙️ Settings
 
-2. **Contextual Description:** The description explicitly defines exactly **what the skill does** and **when to use it**.
+| Variable | Default | Meaning |
+|---|---|---|
+| `FORGE_MODEL` | gemma3:4b | Ollama model to use |
+| `FORGE_CTX` | 8192 | Context window |
+| `FORGE_MAX_TOKENS` | 1000 | Max tokens per model reply |
+| `FORGE_MAX_STEPS` | 8 | Step limit for the agent loop |
 
-3. **Validation:** The harness checks for unclosed code blocks, description lengths, and cross-references every mentioned `function()` to guarantee it actually exists in the target repository (Grounding Check).
+## 🔍 How it works
 
-## 🛠️ Harness: Original Contributions & Modifications
+1. The harness clones the repo (or reads the local folder).
+2. `inspect_repository` lists key files and the real public functions.
+3. The model writes a `SKILL.md` using the `generate_skill` tool.
+4. `validate_skill` checks format, naming, and that every function the skill names really exists (grounding check). It also reports coverage.
+5. If validation fails, the error gives the exact fix and the model retries.
+6. On `finish`, the harness re-runs validation. Success is decided by code, not by the model.
 
-As per the Hacktoberfest submission requirements, here is the breakdown of what was built and modified for this specific project:
+## 📂 Examples
 
-* **100% Original Implementation:** All core components were written specifically for this project from scratch. This includes:
+`examples/` holds real runs, each with the generated `SKILL.md` and a `trace.json` showing every step.
 
-  * The autonomous loop and step-budget controller.
-  * The context builder and progressive disclosure system.
-  * The tool registry (`load_skill`, `inspect_repository`, `generate_skill`, `validate_skill`, `finish`).
-  * Argument validation and JSON auto-retry mechanics.
+## 📐 Agent Skill checks
 
-* **Custom API Extractor:** Built an extractor using AST/Regex that understands Python, JavaScript/TypeScript, Go, and Rust.
+The validator checks the key rules of the Agent Skill format:
 
-* **Deterministic Validator:** Engineered a grounding check that validates frontmatter, naming rules, and ensures model-hallucinated functions are rejected.
+1. **Frontmatter** with `name` and `description`.
+2. **Name** is `lowercase-with-hyphens` and equals its folder name.
+3. **Description and body length** are within limits.
+4. **No unclosed code blocks.**
+5. **Grounding:** at least one real function is mentioned, and every named function must exist in the target repository.
 
-* **Experience Memory:** Added a unique `memory.json` loop that saves "lessons" when the model fixes its own validation errors, injecting them into future runs without weight training.
+## 🛠️ Original contributions
 
-* **Bundled Skill:** `skills/skillforge/SKILL.md` is our bundled, native skill formatted to the strict Agent Skill standards.
+All core components were written from scratch for this project:
 
-## 🧪 Testing (No Model Needed)
+* The agent loop and step-budget controller.
+* The context builder and progressive disclosure (`load_skill`).
+* The tool registry: `load_skill`, `inspect_repository`, `generate_skill`, `validate_skill`, `finish`.
+* Argument validation, JSON parsing and automatic retry.
+* An API extractor for Python, JavaScript, TypeScript, Go and Rust.
+* A deterministic validator with a grounding check that rejects invented functions.
+* Experience memory (`memory.py`): lessons from errors the model later fixed are saved to `memory.json` and injected into future runs, with no weight training.
+* A web UI (`ui.py`) with repository-link and folder-upload inputs and a live log.
+* A bundled skill: `skills/skillforge/SKILL.md`.
 
-Verify the core logic, error-repair loop, and memory injection locally:
-*(Windows users: Run `set PYTHONPATH=.` before executing)*
+## ⚠️ Known limits
 
-```bash
-# Tests the repair loop: malformed JSON, hallucinated functions, bad names
-PYTHONPATH=. python tests/test_loop.py      
+* Slow on CPU, and a 4B model can leave placeholders such as `git clone [repository URL]`.
+* Coverage (how many public functions the skill mentions) is reported, not required.
+* Function extraction supports Python, JavaScript, TypeScript, Go and Rust.
+* The UI runs one job at a time, and there is no second-agent evaluation yet.
 
-# Tests memory: ensures lessons are saved and injected into future runs
-PYTHONPATH=. python tests/test_memory.py    
+## 🧪 Tests (no model needed)
+
+Windows users: run `set PYTHONPATH=.` first.
+
+```
+# Repair loop: malformed JSON, hallucinated functions, bad names
+PYTHONPATH=. python tests/test_loop.py
+
+# Memory: lessons are saved and injected into later runs
+PYTHONPATH=. python tests/test_memory.py
 ```
 
 ## 📜 License
 
-This project is open-source and licensed under the **[MIT License / Apache-2.0]** *(Note: Please ensure the actual LICENSE file is present in the repository root).*
+MIT License. See [LICENSE](LICENSE).
 
 *Developed for Hacktoberfest.*
