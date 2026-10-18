@@ -1,0 +1,142 @@
+[
+  {
+    "step": 1,
+    "action": {
+      "action": "inspect_repository",
+      "reason": "To understand the repository's contents and generate an appropriate skill.",
+      "arguments": {}
+    },
+    "result": {
+      "status": "ok",
+      "meta": {
+        "name": "verilearn",
+        "npm_scripts": [
+          "dev",
+          "build",
+          "lint",
+          "preview"
+        ]
+      },
+      "top_level": [
+        "GITHUB_GUIDE.md",
+        "README.md",
+        "eslint.config.js",
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "postcss.config.cjs",
+        "public",
+        "src",
+        "tailwind.config.js",
+        "vite.config.js"
+      ],
+      "key_files": [
+        "README.md",
+        "package.json",
+        "GITHUB_GUIDE.md",
+        "eslint.config.js",
+        "package-lock.json",
+        "tailwind.config.js",
+        "vite.config.js",
+        "src/App.jsx",
+        "src/main.jsx",
+        "src/components/AILoading.jsx",
+        "src/components/CheatAlert.jsx",
+        "src/components/Onboarding.jsx",
+        "src/components/ProfessorView.jsx",
+        "src/components/RoleSelector.jsx",
+        "src/components/ScoreReport.jsx",
+        "src/components/Splash.jsx",
+        "src/components/Timer.jsx",
+        "src/components/VivaSession.jsx",
+        "src/components/VoiceInput.jsx",
+        "src/hooks/useAntiCheat.js",
+        "src/services/groq.js",
+        "src/utils/professorstorage.js",
+        "src/utils/storage.js",
+        "src/components/professor/FaceEnroll.jsx",
+        "src/components/professor/FaceVerify.jsx",
+        "src/components/professor/ProfessorAuth.jsx",
+        "src/components/professor/ProfessorDashboard.jsx",
+        "public/models/face_landmark_68_model-weights_manifest.json",
+        "public/models/face_recognition_model-weights_manifest.json",
+        "public/models/tiny_face_detector_model-weights_manifest.json"
+      ],
+      "api": [
+        "App()  [src/App.jsx]",
+        "Onboarding({ onSubmit })  [src/components/Onboarding.jsx]",
+        "Splash({ onDone })  [src/components/Splash.jsx]",
+        "AILoading()  [src/components/AILoading.jsx]",
+        "CheatAlert({ studentData })  [src/components/CheatAlert.jsx]",
+        "ProfessorView({ onBack })  [src/components/ProfessorView.jsx]",
+        "RoleSelector({ onSelect })  [src/components/RoleSelector.jsx]",
+        "ScoreReport({ studentData, result, answers, onRestart })  [src/components/ScoreReport.jsx]",
+        "Timer({ totalSeconds = 120, onTimeout })  [src/components/Timer.jsx]",
+        "VivaSession({ questions, studentData, onComplete, onCheat })  [src/components/VivaSession.jsx]",
+        "VoiceInput({ onTranscript })  [src/components/VoiceInput.jsx]",
+        "useAntiCheat(onCheat)  [src/hooks/useAntiCheat.js]",
+        "generateQuestions(fileContent, subject)  [src/services/groq.js]",
+        "evaluateAnswer(question, answer, difficulty)  [src/services/groq.js]",
+        "getProfessors()  [src/utils/professorstorage.js]",
+        "professorExists(username)  [src/utils/professorstorage.js]",
+        "signUpProfessor(username, password, subject)  [src/utils/professorstorage.js]",
+        "loginProfessor(username, password)  [src/utils/professorstorage.js]",
+        "getResults()  [src/utils/professorstorage.js]",
+        "saveResult({ name, rollId, subject, score, max, percentage })  [src/utils/professorstorage.js]",
+        "getRecords()  [src/utils/storage.js]",
+        "saveRecord(record)  [src/utils/storage.js]",
+        "clearRecords()  [src/utils/storage.js]",
+        "FaceEnroll({ username, onEnrolled, onSkip })  [src/components/professor/FaceEnroll.jsx]",
+        "FaceVerify({ username, onVerified, onFailed, onSkip })  [src/components/professor/FaceVerify.jsx]",
+        "ProfessorAuth({ onAuth, onBack })  [src/components/professor/ProfessorAuth.jsx]",
+        "ProfessorDashboard({ professor, onLogout })  [src/components/professor/ProfessorDashboard.jsx]"
+      ],
+      "readme": "\ufeff# VeriLearn \u2014 AI Powered Smart Viva & Academic Evaluation Platform\n\n## \ud83d\ude80 Overview\n\n**VeriLearn** is an intelligent AI-powered viva examination platform designed to modernize traditional oral assessments through automation, fairness, security, and real-time evaluation.\n\nThe project combines:\n\n- \ud83e\udd16 AI-generated viva questions\n- \ud83c\udfa4 Voice-based answering system\n- \ud83e\udde0 AI answer evaluation and grading\n- \ud83d\udd12 Anti-cheating monitoring\n- \ud83d\udc64 Face recognition authentication\n- \ud83d\udcc4 Automatic document analysis\n- \ud83d\udcca Performance reporting dashboard\n- \ud83d\udc68\u200d\ud83c\udfeb Professor management panel\n\nVeriLearn transforms static and manually conducted viva examinations into a secure, interactive, and scalable digital experience.\n\n---\n\n# \u2728 Why VeriLearn?\n\nTraditional viva systems often suffer from:\n\n- Subjective marking\n- Manual effort\n- Lack of scalability\n- Weak cheating detection\n- Inconsistent evaluation\n- Limited accessibility\n- Time-consuming questioning\n\nVeriLearn solves these problems by integrating AI-based automation with real-time monitoring and smart evaluation mechanisms.\n\nThe platform ensures:\n\n\u2705 Fairness in grading  \n\u2705 Automated viva generation  \n\u2705 Faster assessments  \n\u2705 Improved academic integrity  \n\u2705 Better student experience  \n\u2705 Smart professor-side management  \n\n---\n\n# \ud83e\udde0 Core Idea of the Project\n\nThe student uploads academic material such as:\n\n- PDF files\n- DOCX documents\n- TXT files\n- Code files\n- Notes\n- Assignments\n\nThe AI analyzes the uploaded content and automatically generates viva questions categorized by difficulty:\n\n- Easy\n- Medium\n- Hard\n\nStudents answer using:\n\n- Keyboard input\n- Voice recognition input\n\nThe AI then evaluates the answers intelligently and generates:\n\n- Scores\n- Feedback\n- Grades\n- Performance summaries\n\nMeanwhile, the system continuously monitors suspicious activity using anti-cheat logic.\n\n---\n\n# \ud83c\udfd7\ufe0f Tech Stack\n\n## Frontend\n\n- React 19\n- Vite\n- React Router DOM\n- TailwindCSS\n\n## AI & Intelligence\n\n- Groq API\n- Llama 3.3 70B Versatile Model\n\n## Document Processing\n\n-"
+    }
+  },
+  {
+    "step": 2,
+    "action": {
+      "action": "generate_skill",
+      "reason": "Create the skill.md file based on the repository inspection.",
+      "arguments": {
+        "name": "verilearn-usage",
+        "skill_md": "--- \nname: verilearn-usage\ndescription: This skill teaches you how to use the VeriLearn project, an AI-powered viva examination platform. It covers installation, running the application, and key functions for both students and professors.\n--- \n# Usage Example and Main Functions\n\n## Overview\nVeriLearn is an AI-powered viva examination platform designed to modernize oral assessments. It uses AI to generate questions, evaluate answers, and monitor for cheating. This skill guides you through its core functionalities.\n\n## Installation & Running\n1.  Clone the repository: `git clone [repository URL]`\n2.  Navigate to the project directory: `cd verilearn`\n3.  Install dependencies: `npm install`\n4.  Run the development server: `npm run dev`\n\n## Student Functions\n*   `Onboarding({ onSubmit })`: Starts the viva session, allowing students to answer questions via voice or keyboard.  Example: `Onboarding({ onSubmit: (answer) => console.log(answer) })`\n*   `Splash({ onDone })`: Displays the initial splash screen.\n*   `AILoading()`:  Indicates that the AI is generating questions.\n*   `ScoreReport({ studentData, result, answers, onRestart })`:  Displays the student's score and evaluation.\n*   `VoiceInput({ onTranscript })`:  Captures student responses via voice.\n\n## Professor Functions\n*   `FaceEnroll({ username, onEnrolled, onSkip })`:  Enrolls the professor using face recognition.\n*   `ProfessorDashboard({ professor, onLogout })`:  Provides a dashboard for managing students and viewing reports.\n\n## Pitfalls\n*   Ensure a stable internet connection for AI processing.\n*   Verify correct microphone permissions for voice input.\n*   Review generated questions for accuracy and relevance.\n"
+      }
+    },
+    "result": {
+      "status": "ok",
+      "written": "output\\verilearn-usage\\SKILL.md"
+    }
+  },
+  {
+    "step": 3,
+    "action": {
+      "action": "validate_skill",
+      "reason": "Validate the generated skill file.",
+      "arguments": {
+        "name": "verilearn-usage"
+      }
+    },
+    "result": {
+      "status": "passed",
+      "errors": [],
+      "coverage": "7/28 public functions mentioned"
+    }
+  },
+  {
+    "step": 4,
+    "action": {
+      "action": "finish",
+      "reason": "Skill validation passed, complete.",
+      "arguments": {
+        "name": "verilearn-usage"
+      }
+    },
+    "result": {
+      "status": "passed",
+      "errors": [],
+      "coverage": "7/28 public functions mentioned"
+    }
+  }
+]
