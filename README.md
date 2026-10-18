@@ -3,7 +3,6 @@
 **An open-weight agent harness that writes, validates, repairs, and remembers Agent Skills for any code repository.**
 
 🏆 *Built for the Hacktoberfest Hack Day Lahore x Fluxxion "Best Open-Source AI Project" challenge.*
-![SkillForge web UI](docs/screenshots/ui-full.png)
 
 ## 📖 What is SkillForge?
 
@@ -43,7 +42,7 @@ Open http://127.0.0.1:8000 in your browser.
 * **Option 1, repository link:** paste a public GitHub URL or `owner/repo`, then click **Forge from link**.
 * **Option 2, upload a folder:** pick a local repo folder, then click **Forge from folder**.
 * **Try demo** runs the bundled `demo_repo`, the fastest way to see it work.
-![Pasting a repository link](docs/screenshots/ui-link-input.png)
+
 Watch the **Live log**. `SUCCESS` is printed only after the harness's own re-check passes. The finished `SKILL.md` appears on the page and can be downloaded.
 
 On CPU a run takes a few minutes. Small repos (under about 15 files) are fastest.
@@ -82,6 +81,24 @@ Skills are written to `output/<name>/SKILL.md` and the step trace to `output/tra
 4. `validate_skill` checks format, naming, and that every function the skill names really exists (grounding check). It also reports coverage.
 5. If validation fails, the error gives the exact fix and the model retries.
 6. On `finish`, the harness re-runs validation. Success is decided by code, not by the model.
+
+### See it in action
+
+**1. The web UI.** Two inputs: a repository link or a folder upload.
+
+![SkillForge web UI](docs/screenshots/ui-full.png)
+
+**2. Paste a repository link.** A public GitHub URL, `owner/repo`, or a local path.
+
+![Pasting a repository link](docs/screenshots/ui-link-input.png)
+
+**3. Watch the repair loop in the live log.** The validator rejects a function that does not exist in the repository (`OnDone()`), the model fixes it, validation passes, a lesson is saved to memory, and the harness prints `SUCCESS` only after its own re-check.
+
+![Live log: validation fails, the model repairs the skill, memory saves a lesson, then SUCCESS](docs/screenshots/ui-live-log.png)
+
+**4. Get the generated skill.** The finished `SKILL.md` appears on the page and can be downloaded.
+
+![The generated SKILL.md](docs/screenshots/ui-result.png)
 
 ## 📂 Examples
 
